@@ -1,0 +1,16 @@
+@property --num {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+
+.current-number {
+  transition: --num 0.5s;
+  counter-set: num var(--num);
+}
+.current-number::after {
+  content: counter(num);
+}
+.current-number:hover {
+  --num: 100;
+}

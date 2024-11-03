@@ -15,8 +15,8 @@ export default function GamePage() {
   const [showOverlay, setShowOverlay] = useState(false);
   const [currentNumber, setCurrentNumber] = useState(0);
   const [firstWinner, setFirstWinner] = useState<string | null>(null);
-  const [secondWinner, setSecondWinner] = useState<string | null>(null);
-  const [thirdWinner, setThirdWinner] = useState<string | null>(null);
+  // const [secondWinner, setSecondWinner] = useState<string | null>(null);
+  // const [thirdWinner, setThirdWinner] = useState<string | null>(null);
 
   function pullNumber(): void {
     if (pulledNumbers.length === bingoNumbers) {

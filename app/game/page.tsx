@@ -67,7 +67,7 @@ export default function GamePage() {
     };
 
     frame();
-  }, [firstWinner, secondWinner, thirdWinner]);
+  }, [firstWinner]);
 
   useEffect(() => {
     setTimeout(() => {

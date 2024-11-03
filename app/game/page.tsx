@@ -1,23 +1,30 @@
 "use client";
 
 import { Field, PulledNumber, Tile } from "@/components/game";
-import { CSSProperties, useState } from "react";
+import { CSSProperties, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { CurrentNumber } from "@/components/game/current-number";
 import { Overlay } from "@/components/game/overlay";
+import confetti from "canvas-confetti";
 
 export default function GamePage() {
+  const bingoNumbers = 90;
+
+  const [isInitialized, setIsInitialized] = useState(false);
   const [pulledNumbers, setPulledNumbers] = useState<number[]>([]);
   const [showOverlay, setShowOverlay] = useState(false);
   const [currentNumber, setCurrentNumber] = useState(0);
+  const [firstWinner, setFirstWinner] = useState<string | null>(null);
+  const [secondWinner, setSecondWinner] = useState<string | null>(null);
+  const [thirdWinner, setThirdWinner] = useState<string | null>(null);
 
   function pullNumber(): void {
-    if (pulledNumbers.length === 90) {
+    if (pulledNumbers.length === bingoNumbers) {
       return;
     }
 
     while (true) {
-      const number = Math.ceil(Math.random() * 90);
+      const number = Math.ceil(Math.random() * bingoNumbers);
 
       if (!pulledNumbers.includes(number)) {
         setShowOverlay(true);
@@ -30,13 +37,51 @@ export default function GamePage() {
     }
   }
 
+  useEffect(() => {
+    if (!isInitialized) return;
+
+    const end = Date.now() + 3 * 1000; // 3 seconds
+    const colors = ["#a786ff", "#fd8bbc", "#eca184", "#f8deb1"];
+
+    const frame = () => {
+      if (Date.now() > end) return;
+
+      confetti({
+        particleCount: 2,
+        angle: 60,
+        spread: 55,
+        startVelocity: 60,
+        origin: { x: 0, y: 0.5 },
+        colors: colors,
+      });
+      confetti({
+        particleCount: 2,
+        angle: 120,
+        spread: 55,
+        startVelocity: 60,
+        origin: { x: 1, y: 0.5 },
+        colors: colors,
+      });
+
+      requestAnimationFrame(frame);
+    };
+
+    frame();
+  }, [firstWinner, secondWinner, thirdWinner]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsInitialized(true);
+    }, 1000);
+  }, []);
+
   return (
     <main className="h-screen grid">
       <div className="grid sm:p-4 gap-2 grid-cols-[3fr,1fr] overflow-hidden">
         <article className="grid relative">
           <Overlay show={showOverlay} number={currentNumber} />
           <Field>
-            {Array.from({ length: 90 }, (_, i) => (
+            {Array.from({ length: bingoNumbers }, (_, i) => (
               <Tile
                 key={i}
                 number={i + 1}
@@ -61,6 +106,14 @@ export default function GamePage() {
           <div className="flex items-center justify-center py-4">
             <Button onClick={pullNumber} className="w-full">
               Nummer ziehen
+            </Button>
+          </div>
+          <div className="flex items-center justify-center py-4">
+            <Button
+              onClick={() => setFirstWinner((Math.random() * 100).toString())}
+              className="w-full"
+            >
+              1. Sieger
             </Button>
           </div>
           <div

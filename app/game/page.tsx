@@ -14,10 +14,10 @@ export default function GamePage() {
   const [pulledNumbers, setPulledNumbers] = useState<number[]>([]);
   const [showOverlay, setShowOverlay] = useState(false);
   const [currentNumber, setCurrentNumber] = useState(0);
-  const [firstWinner, setFirstWinner] = useState<string | null>(null);
-  const [overlayTimeout, setOverlayTimeout] = useState<NodeJS.Timeout | null>(null);
-  const [secondWinner, setSecondWinner] = useState<string | null>(null);
-  const [thirdWinner, setThirdWinner] = useState<string | null>(null);
+  const [winners, setWinners] = useState<string | null>(null);
+  const [overlayTimeout, setOverlayTimeout] = useState<NodeJS.Timeout | null>(
+    null
+  );
 
   function pullNumber(): void {
     if (pulledNumbers.length === bingoNumbers) {
@@ -79,7 +79,7 @@ export default function GamePage() {
     };
 
     frame();
-  }, [firstWinner, secondWinner, thirdWinner]);
+  }, [winners]);
 
   useEffect(() => {
     setIsInitialized(true);
@@ -120,7 +120,7 @@ export default function GamePage() {
           </div>
           <div className="flex items-center justify-center pb-4">
             <Button
-              onClick={() => setFirstWinner((Math.random() * 100).toString())}
+              onClick={() => setWinners((Math.random() * 100).toString())}
               className="w-full"
             >
               Bingo hinzufügen

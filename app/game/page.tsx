@@ -15,8 +15,9 @@ export default function GamePage() {
   const [showOverlay, setShowOverlay] = useState(false);
   const [currentNumber, setCurrentNumber] = useState(0);
   const [firstWinner, setFirstWinner] = useState<string | null>(null);
-  // const [secondWinner, setSecondWinner] = useState<string | null>(null);
-  // const [thirdWinner, setThirdWinner] = useState<string | null>(null);
+  const [overlayTimeout, setOverlayTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [secondWinner, setSecondWinner] = useState<string | null>(null);
+  const [thirdWinner, setThirdWinner] = useState<string | null>(null);
 
   function pullNumber(): void {
     if (pulledNumbers.length === bingoNumbers) {
@@ -27,14 +28,25 @@ export default function GamePage() {
       const number = Math.ceil(Math.random() * bingoNumbers);
 
       if (!pulledNumbers.includes(number)) {
-        setShowOverlay(true);
         setCurrentNumber(number);
-        setTimeout(() => {
-          setShowOverlay(false);
-        }, 3000);
+        showNewNumber();
+
         return setPulledNumbers((prev) => [...prev, number]);
       }
     }
+  }
+
+  function showNewNumber(): void {
+    if (overlayTimeout) {
+      clearTimeout(overlayTimeout);
+    }
+    setShowOverlay(true);
+
+    setOverlayTimeout(
+      setTimeout(() => {
+        setShowOverlay(false);
+      }, 3000)
+    );
   }
 
   useEffect(() => {
@@ -67,17 +79,15 @@ export default function GamePage() {
     };
 
     frame();
-  }, [firstWinner]);
+  }, [firstWinner, secondWinner, thirdWinner]);
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsInitialized(true);
-    }, 1000);
+    setIsInitialized(true);
   }, []);
 
   return (
     <main className="h-screen grid">
-      <div className="grid sm:p-4 gap-2 grid-cols-[3fr,1fr] overflow-hidden">
+      <div className="grid sm:p-3 gap-3 grid-cols-[3fr,1fr] overflow-hidden">
         <article className="grid relative">
           <Overlay show={showOverlay} number={currentNumber} />
           <Field>
@@ -91,11 +101,11 @@ export default function GamePage() {
             ))}
           </Field>
         </article>
-        <aside className="border rounded-sm grid grid-rows-[max-content,max-content,auto] overflow-hidden p-2">
+        <aside className="border rounded-sm grid grid-rows-[max-content,max-content,max-content,auto] overflow-hidden p-2">
           <div className="latest-number">
             <div className="grid grid-cols-[1fr,3fr] h-32 gap-2">
               <div className="border rounded flex flex-col items-center justify-center">
-                <p className="opacity-60 text-xs">Ziehung</p>
+                <p className="opacity-60 text-xs">Ziehung Nr.</p>
                 <h2 className="text-xl">{pulledNumbers.length}</h2>
               </div>
               <CurrentNumber
@@ -104,16 +114,16 @@ export default function GamePage() {
             </div>
           </div>
           <div className="flex items-center justify-center py-4">
-            <Button onClick={pullNumber} className="w-full">
+            <Button onClick={pullNumber} className="w-full h-16 text-xl">
               Nummer ziehen
             </Button>
           </div>
-          <div className="flex items-center justify-center py-4">
+          <div className="flex items-center justify-center pb-4">
             <Button
               onClick={() => setFirstWinner((Math.random() * 100).toString())}
               className="w-full"
             >
-              1. Sieger
+              Bingo hinzufügen
             </Button>
           </div>
           <div

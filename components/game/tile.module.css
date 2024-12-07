@@ -1,5 +1,5 @@
 .animate-last {
-    animation: animate-last infinite ease-in-out 1.5s both;
+    animation: animate-last infinite ease-in-out 3s both;
 }
 
 @keyframes animate-last {

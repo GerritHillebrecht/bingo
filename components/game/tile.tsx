@@ -1,6 +1,7 @@
+import Ripple from "@/components/ui/ripple";
 import { cn } from "@/lib/utils";
-import style from "./tile.module.css";
 import { CSSProperties } from "react";
+import style from "./tile.module.css";
 
 export function Tile({
   number,
@@ -33,6 +34,7 @@ export function Tile({
         )}
       >
         <span className="">{number}</span>
+        {latestPulled && <Ripple mainCircleSize={8} mainCircleOpacity={0.5} />}
       </div>
     </div>
   );

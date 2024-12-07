@@ -12,6 +12,8 @@ import { toast } from "sonner";
 import LetterPullup from "@/components/ui/letter-pullup";
 import { RotateCcw } from "lucide-react";
 
+import { RainbowButton } from "@/components/ui/rainbow-button";
+
 import {
   Dialog,
   DialogClose,
@@ -182,9 +184,10 @@ export default function GamePage() {
               value={(pulledNumbers.length / bingoNumbers) * 100}
               max={bingoNumbers}
             />
-            <Button onClick={pullNumber} className="w-full h-16 text-xl">
+            <RainbowButton onClick={pullNumber} className="w-full h-16 text-xl">Nummer ziehen</RainbowButton>
+            {/* <Button onClick={pullNumber} className="w-full h-16 text-xl">
               Nummer ziehen
-            </Button>
+            </Button> */}
           </div>
           <div
             className="numbers overflow-y-auto"

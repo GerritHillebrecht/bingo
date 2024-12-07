@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Bingo",
-    short_name: "bingo",
+    short_name: "Bingo",
     description: "An intuitive bingo game",
     start_url: "/",
     display: "standalone",

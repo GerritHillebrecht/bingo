@@ -11,6 +11,7 @@ import useSound from "use-sound";
 import { toast } from "sonner";
 import LetterPullup from "@/components/ui/letter-pullup";
 import { RotateCcw } from "lucide-react";
+import SparklesText from "@/components/ui/sparkles-text";
 
 import { RainbowButton } from "@/components/ui/rainbow-button";
 
@@ -291,11 +292,12 @@ export default function GamePage() {
       <Dialog open={showWinnerDialog}>
         <DialogContent className="bg-transparent border-none shadow-none text-white">
           <p className="text-center">{winners.length}. Sieger</p>
-          <LetterPullup
+          <SparklesText className="!text-9xl text-white font-black" text={winners.at(-1) ?? "What the fuck"} />
+          {/* <LetterPullup
             className="!text-9xl text-white font-black"
             words={winners.at(-1) ?? "What the fuck"}
             delay={0.25}
-          />
+          /> */}
           {/* <h1 className="text-9xl font-black">{winners.at(-1)}</h1> */}
         </DialogContent>
       </Dialog>

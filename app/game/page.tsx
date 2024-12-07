@@ -209,7 +209,7 @@ export default function GamePage() {
               <div className="flex items-center w-full gap-1">
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button className="w-full">Bingo hinzufügen</Button>
+                    <Button className="w-full">Bingo!</Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>

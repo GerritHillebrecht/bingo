@@ -193,9 +193,6 @@ export default function GamePage() {
                 ? "Erste Zahl ziehen"
                 : "Nächste Zahl"}
             </RainbowButton>
-            {/* <Button onClick={pullNumber} className="w-full h-16 text-xl">
-              Nummer ziehen
-            </Button> */}
           </div>
           <div
             className="numbers overflow-y-auto"
@@ -271,7 +268,11 @@ export default function GamePage() {
               </div>
             </div>
             {winners.length > 0 && (
-              <WinnersTable showDelete={true} setWinners={setWinners} winners={winners} />
+              <WinnersTable
+                showDelete={true}
+                setWinners={setWinners}
+                winners={winners}
+              />
             )}
           </div>
         </aside>

@@ -19,7 +19,7 @@ export function Overlay({ show = false, number = 0 }: OverlayProps) {
         )}
         color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
       >
-        <div className="flex items-center rounded shadow w-full justify-center h-full  bg-orange-700/80">
+        <div className="flex border border-white/30 items-center rounded shadow w-full justify-center h-full  bg-orange-700/80">
           <p
             className={cn(
               "text-[18rem] text-neutral-50",

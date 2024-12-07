@@ -262,7 +262,7 @@ export default function GamePage() {
                 </TooltipProvider>
               </div>
             </div>
-            {winners.length > 0 && <WinnersTable winners={winners} />}
+            {winners.length > 0 && <WinnersTable setWinners={setWinners} winners={winners} />}
           </div>
         </aside>
       </div>
@@ -273,7 +273,7 @@ export default function GamePage() {
             <DialogDescription>Die Sieger dieser Runde sind:</DialogDescription>
           </DialogHeader>
 
-          <WinnersTable winners={winners} />
+          <WinnersTable setWinners={setWinners} winners={winners} />
 
           <DialogFooter className="!justify-start">
             <DialogClose asChild>
@@ -291,7 +291,7 @@ export default function GamePage() {
       <Dialog open={showWinnerDialog}>
         <DialogContent className="bg-transparent border-none shadow-none text-white">
           <p className="text-center">{winners.length}. Sieger</p>
-          <SparklesText className="!text-9xl text-white font-black" text={winners.at(-1) ?? "What the fuck"} />
+          <SparklesText className="!text-9xl text-center text-white font-black" text={winners.at(-1) ?? "What the fuck"} />
 
         </DialogContent>
       </Dialog>

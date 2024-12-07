@@ -26,7 +26,7 @@ export function Tile({
     >
       <div
         className={cn(
-          "rounded-sm bg-gray-300 opacity-50 text-stone-800 flex items-center justify-center transition-colors duration-500",
+          "rounded-sm bg-gray-300 opacity-50 text-stone-800 flex overflow-hidden items-center justify-center transition-colors duration-500",
           active && "bg-stone-800 text-gray-300 opacity-100 z-20",
           active && number % 11 === 0 && "bg-red-500 text-gray-300",
           latestPulled &&

@@ -11,6 +11,6 @@
 .current-number::after {
   content: counter(num);
 }
-.current-number:hover {
+/* .current-number:hover {
   --num: 100;
-}
+} */

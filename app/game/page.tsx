@@ -40,7 +40,7 @@ export default function GamePage() {
   const [winnerNameInputValue, setwinnerNameInputValue] = useState("");
   const [showWinnerDialog, setshowWinnerDialog] = useState(false);
 
-  const handleWinnerNameChange = (event: any) => {
+  const handleWinnerNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setwinnerNameInputValue(event?.target?.value);
   };
 

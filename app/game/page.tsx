@@ -23,6 +23,7 @@ import {
 
 import { WinnersTable } from "@/components/game/winners";
 import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
 
 export default function GamePage() {
   const bingoNumbers = 90;
@@ -40,7 +41,9 @@ export default function GamePage() {
   const [winnerNameInputValue, setwinnerNameInputValue] = useState("");
   const [showWinnerDialog, setshowWinnerDialog] = useState(false);
 
-  const handleWinnerNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleWinnerNameChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setwinnerNameInputValue(event?.target?.value);
   };
 
@@ -190,7 +193,8 @@ export default function GamePage() {
               />
             </div>
           </div>
-          <div className="flex items-center justify-center py-4">
+          <div className="flex flex-col items-center justify-center py-4">
+            <Progress className="mb-1 mt-1" value={pulledNumbers.length / bingoNumbers * 100} max={bingoNumbers} />
             <Button onClick={pullNumber} className="w-full h-16 text-xl">
               Nummer ziehen
             </Button>

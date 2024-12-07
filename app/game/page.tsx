@@ -10,6 +10,7 @@ import { ChangeEvent, CSSProperties, useEffect, useState } from "react";
 import useSound from "use-sound";
 import { toast } from "sonner";
 import LetterPullup from "@/components/ui/letter-pullup";
+import { RotateCcw } from "lucide-react";
 
 import {
   Dialog,
@@ -21,6 +22,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import { WinnersTable } from "@/components/game/winners";
 import { Input } from "@/components/ui/input";
@@ -73,6 +81,12 @@ export default function GamePage() {
 
         return save_to_storage(newPulledNumbers, winners);
       }
+    }
+  }
+
+  function confirmReset() {
+    if (confirm("Sind Sie sicher, dass Sie das Spiel neustarten möchten?")) {
+      handleNewGameStart();
     }
   }
 
@@ -192,39 +206,58 @@ export default function GamePage() {
           </div>
           <div className="border rounded bg-white p-2">
             <div className="flex flex-col items-center justify-center pb-4">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button className="w-full">Bingo hinzufügen</Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                  <DialogHeader>
-                    <DialogTitle>Sieger festlegen</DialogTitle>
-                    <DialogDescription>
-                      Legen den {(winners?.length || 0) + 1}. Sieger fest.
-                    </DialogDescription>
-                  </DialogHeader>
+              <div className="flex items-center w-full gap-1">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button className="w-full">Bingo hinzufügen</Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>Sieger festlegen</DialogTitle>
+                      <DialogDescription>
+                        Legen den {(winners?.length || 0) + 1}. Sieger fest.
+                      </DialogDescription>
+                    </DialogHeader>
 
-                  <Input
-                    id="name"
-                    onChange={handleWinnerNameChange}
-                    value={winnerNameInputValue}
-                    className="col-span-7"
-                    placeholder="Name des Siegers"
-                  />
+                    <Input
+                      id="name"
+                      onChange={handleWinnerNameChange}
+                      value={winnerNameInputValue}
+                      className="col-span-7"
+                      placeholder="Name des Siegers"
+                    />
 
-                  <DialogFooter className="!justify-start">
-                    <DialogClose asChild>
+                    <DialogFooter className="!justify-start">
+                      <DialogClose asChild>
+                        <Button
+                          onClick={handleAddWinner}
+                          type="submit"
+                          className="text-left"
+                        >
+                          {(winners?.length || 0) + 1}. Sieger festlegen
+                        </Button>
+                      </DialogClose>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
                       <Button
-                        onClick={handleAddWinner}
-                        type="submit"
-                        className="text-left"
+                        onClick={confirmReset}
+                        variant="outline"
+                        size="icon"
                       >
-                        {(winners?.length || 0) + 1}. Sieger festlegen
+                        <RotateCcw size={24} />
                       </Button>
-                    </DialogClose>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Neustarten</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
             </div>
             {winners.length > 0 && <WinnersTable winners={winners} />}
           </div>

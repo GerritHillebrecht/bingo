@@ -184,8 +184,14 @@ export default function GamePage() {
               value={(pulledNumbers.length / bingoNumbers) * 100}
               max={bingoNumbers}
             />
-            <RainbowButton onClick={pullNumber} className="w-full h-16 text-xl">
-              {pulledNumbers.length === 0 ? "Erste Zahl ziehen" : "Nächste Zahl"}
+            <RainbowButton
+              onClick={pullNumber}
+              className="w-full h-16 text-xl"
+              disabled={pulledNumbers.length === bingoNumbers}
+            >
+              {pulledNumbers.length === 0
+                ? "Erste Zahl ziehen"
+                : "Nächste Zahl"}
             </RainbowButton>
             {/* <Button onClick={pullNumber} className="w-full h-16 text-xl">
               Nummer ziehen
@@ -264,7 +270,9 @@ export default function GamePage() {
                 </TooltipProvider>
               </div>
             </div>
-            {winners.length > 0 && <WinnersTable setWinners={setWinners} winners={winners} />}
+            {winners.length > 0 && (
+              <WinnersTable setWinners={setWinners} winners={winners} />
+            )}
           </div>
         </aside>
       </div>
@@ -293,8 +301,10 @@ export default function GamePage() {
       <Dialog open={showWinnerDialog}>
         <DialogContent className="bg-transparent border-none shadow-none text-white">
           <p className="text-center">{winners.length}. Sieger</p>
-          <SparklesText className="!text-9xl text-center text-white font-black" text={winners.at(-1) ?? "What the fuck"} />
-
+          <SparklesText
+            className="!text-9xl text-center text-white font-black"
+            text={winners.at(-1) ?? "What the fuck"}
+          />
         </DialogContent>
       </Dialog>
     </main>

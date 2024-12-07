@@ -37,8 +37,6 @@ export default function GamePage() {
   const [winners, setWinners] = useState<string[]>([]);
   const [newNumberOverlayTimeout, setnewNumberOverlayTimeout] =
     useState<NodeJS.Timeout | null>(null);
-  const [showWinnerOverly, setShowWinnerOverly] =
-    useState<NodeJS.Timeout | null>(null);
   const [winnerNameInputValue, setwinnerNameInputValue] = useState("");
   const [showNumberOverlay, setShowNumberOverlay] = useState(false);
   const [showWinnersDialog, setShowWinnersDialog] = useState(false);

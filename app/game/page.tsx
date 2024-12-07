@@ -28,7 +28,7 @@ export default function GamePage() {
   const bingoNumbers = 90;
 
   const [playWinner] = useSound("/audio/winner_v2.wav", { volume: 1 });
-  const [playNumber] = useSound("/audio/new_number_v2.mp3", { volume: 1 });
+  const [playNumber] = useSound("/audio/new_number_v3.wav", { volume: 1 });
   const [isInitialized, setIsInitialized] = useState(false);
   const [pulledNumbers, setPulledNumbers] = useState<number[]>([]);
   const [showOverlay, setShowOverlay] = useState(false);

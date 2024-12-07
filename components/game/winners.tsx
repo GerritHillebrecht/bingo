@@ -13,9 +13,11 @@ import { Button } from "@/components/ui/button";
 export function WinnersTable({
   winners,
   setWinners,
+  showDelete = false,
 }: {
   winners: string[];
   setWinners: any;
+  showDelete?: boolean;
 }) {
   function deleteWinner(index: number) {
     console.log("delete winner");
@@ -32,7 +34,7 @@ export function WinnersTable({
         <TableRow>
           <TableHead className="w-[100px]">Sieger</TableHead>
           <TableHead>Name</TableHead>
-          <TableHead className="text-right">Löschen</TableHead>
+          {showDelete && <TableHead className="text-right">Löschen</TableHead>}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -40,15 +42,17 @@ export function WinnersTable({
           <TableRow key={place}>
             <TableCell>{place + 1}.</TableCell>
             <TableCell>{winner}</TableCell>
-            <TableCell className="w-[min-content] text-end">
-              <Button
-                onClick={() => deleteWinner(place)}
-                size="icon"
-                variant="outline"
-              >
-                <Trash2 size={16} />
-              </Button>
-            </TableCell>
+            {showDelete && (
+              <TableCell className="w-[min-content] text-end">
+                <Button
+                  onClick={() => deleteWinner(place)}
+                  size="icon"
+                  variant="outline"
+                >
+                  <Trash2 size={16} />
+                </Button>
+              </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>

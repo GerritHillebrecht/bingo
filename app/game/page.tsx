@@ -271,7 +271,7 @@ export default function GamePage() {
               </div>
             </div>
             {winners.length > 0 && (
-              <WinnersTable setWinners={setWinners} winners={winners} />
+              <WinnersTable showDelete={true} setWinners={setWinners} winners={winners} />
             )}
           </div>
         </aside>

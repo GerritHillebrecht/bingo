@@ -62,13 +62,14 @@ export default function GamePage() {
       if (!pulledNumbers.includes(number)) {
         setCurrentNumber(number);
         showNewNumber();
+        const newPulledNumbers = [...pulledNumbers, number];
         setPulledNumbers((prev) => [...prev, number]);
         playNumber();
 
         return localStorage.setItem(
           LOCALSTORAGE_NAME,
           JSON.stringify({
-            pulledNumbers,
+            pulledNumbers: newPulledNumbers,
             winners,
           })
         );

@@ -1,14 +1,15 @@
 "use client";
 
-const LOCALSTORAGE_NAME = "BINGO_GAME";
-
 import { Field, PulledNumber, Tile } from "@/components/game";
 import { CurrentNumber } from "@/components/game/current-number";
 import { Overlay } from "@/components/game/overlay";
 import { Button } from "@/components/ui/button";
-import confetti from "canvas-confetti";
-import { CSSProperties, useEffect, useState } from "react";
+import { LOCALSTORAGE_NAME, save_to_storage } from "@/lib/storage";
+import { showConfetti } from "@/lib/utils";
+import { ChangeEvent, CSSProperties, useEffect, useState } from "react";
 import useSound from "use-sound";
+import { toast } from "sonner";
+import LetterPullup from "@/components/ui/letter-pullup";
 
 import {
   Dialog,
@@ -32,23 +33,26 @@ export default function GamePage() {
   const [playNumber] = useSound("/audio/new_number_v3.wav", { volume: 1 });
   const [isInitialized, setIsInitialized] = useState(false);
   const [pulledNumbers, setPulledNumbers] = useState<number[]>([]);
-  const [showOverlay, setShowOverlay] = useState(false);
   const [currentNumber, setCurrentNumber] = useState(0);
   const [winners, setWinners] = useState<string[]>([]);
-  const [overlayTimeout, setOverlayTimeout] = useState<NodeJS.Timeout | null>(
-    null
-  );
+  const [newNumberOverlayTimeout, setnewNumberOverlayTimeout] =
+    useState<NodeJS.Timeout | null>(null);
+  const [showWinnerOverly, setShowWinnerOverly] =
+    useState<NodeJS.Timeout | null>(null);
   const [winnerNameInputValue, setwinnerNameInputValue] = useState("");
-  const [showWinnerDialog, setshowWinnerDialog] = useState(false);
+  const [showNumberOverlay, setShowNumberOverlay] = useState(false);
+  const [showWinnersDialog, setShowWinnersDialog] = useState(false);
+  const [showWinnerDialog, setShowWinnerDialog] = useState(false);
 
-  const handleWinnerNameChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleWinnerNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setwinnerNameInputValue(event?.target?.value);
   };
 
   const handleAddWinner = () => {
-    if (!winnerNameInputValue) return;
+    if (!winnerNameInputValue) {
+      toast.error("Bitte gib den Namen des Siegers an.");
+      return;
+    }
     const name: string = winnerNameInputValue;
     setWinners((prev) => [...prev, name]);
     setwinnerNameInputValue("");
@@ -69,26 +73,20 @@ export default function GamePage() {
         setPulledNumbers((prev) => [...prev, number]);
         playNumber();
 
-        return localStorage.setItem(
-          LOCALSTORAGE_NAME,
-          JSON.stringify({
-            pulledNumbers: newPulledNumbers,
-            winners,
-          })
-        );
+        return save_to_storage(newPulledNumbers, winners);
       }
     }
   }
 
   function showNewNumber(): void {
-    if (overlayTimeout) {
-      clearTimeout(overlayTimeout);
+    if (newNumberOverlayTimeout) {
+      clearTimeout(newNumberOverlayTimeout);
     }
-    setShowOverlay(true);
+    setShowNumberOverlay(true);
 
-    setOverlayTimeout(
+    setnewNumberOverlayTimeout(
       setTimeout(() => {
-        setShowOverlay(false);
+        setShowNumberOverlay(false);
       }, 3000)
     );
   }
@@ -96,16 +94,7 @@ export default function GamePage() {
   useEffect(() => {
     if (!isInitialized) return;
 
-    localStorage.setItem(
-      LOCALSTORAGE_NAME,
-      JSON.stringify({
-        pulledNumbers,
-        winners,
-      })
-    );
-
-    const end = Date.now() + 3 * 1000; // 3 seconds
-    const colors = ["#a786ff", "#fd8bbc", "#eca184", "#f8deb1"];
+    save_to_storage(pulledNumbers, winners);
 
     if (winners.length == 3) {
       showWinnerTable();
@@ -113,30 +102,12 @@ export default function GamePage() {
 
     if (winners.length > 0) {
       playWinner();
-      const frame = () => {
-        if (Date.now() > end) return;
+      showConfetti();
+      setShowWinnerDialog(true);
 
-        confetti({
-          particleCount: 2,
-          angle: 60,
-          spread: 55,
-          startVelocity: 60,
-          origin: { x: 0, y: 0.5 },
-          colors: colors,
-        });
-        confetti({
-          particleCount: 2,
-          angle: 120,
-          spread: 55,
-          startVelocity: 60,
-          origin: { x: 1, y: 0.5 },
-          colors: colors,
-        });
-
-        requestAnimationFrame(frame);
-      };
-
-      frame();
+      setTimeout(() => {
+        setShowWinnerDialog(false);
+      }, 3500);
     }
   }, [winners]);
 
@@ -146,13 +117,13 @@ export default function GamePage() {
   }, []);
 
   function showWinnerTable() {
-    setshowWinnerDialog(true);
+    setShowWinnersDialog(true);
   }
 
   function handleNewGameStart() {
     setPulledNumbers([]);
     setWinners([]);
-    setshowWinnerDialog(false);
+    setShowWinnersDialog(false);
   }
 
   function loadLocalStorage() {
@@ -169,7 +140,7 @@ export default function GamePage() {
     <main className="h-screen grid">
       <div className="grid sm:p-3 gap-3 grid-cols-[3fr,1fr] overflow-hidden">
         <article className="grid relative">
-          <Overlay show={showOverlay} number={currentNumber} />
+          <Overlay show={showNumberOverlay} number={currentNumber} />
           <Field>
             {Array.from({ length: bingoNumbers }, (_, i) => (
               <Tile
@@ -194,7 +165,11 @@ export default function GamePage() {
             </div>
           </div>
           <div className="flex flex-col items-center justify-center py-4">
-            <Progress className="mb-1 mt-1" value={pulledNumbers.length / bingoNumbers * 100} max={bingoNumbers} />
+            <Progress
+              className="mb-1 mt-1"
+              value={(pulledNumbers.length / bingoNumbers) * 100}
+              max={bingoNumbers}
+            />
             <Button onClick={pullNumber} className="w-full h-16 text-xl">
               Nummer ziehen
             </Button>
@@ -226,7 +201,7 @@ export default function GamePage() {
                 <DialogHeader>
                   <DialogTitle>Sieger festlegen</DialogTitle>
                   <DialogDescription>
-                    Legen den {winners?.length || 0 + 1}. Sieger fest.
+                    Legen den {(winners?.length || 0) + 1}. Sieger fest.
                   </DialogDescription>
                 </DialogHeader>
 
@@ -255,7 +230,7 @@ export default function GamePage() {
           </div>
         </aside>
       </div>
-      <Dialog open={showWinnerDialog}>
+      <Dialog open={showWinnersDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Rundensieger</DialogTitle>
@@ -275,6 +250,17 @@ export default function GamePage() {
               </Button>
             </DialogClose>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={showWinnerDialog}>
+        <DialogContent className="bg-transparent border-none shadow-none text-white">
+          <p className="text-center">{winners.length}. Sieger</p>
+          <LetterPullup
+            className="!text-9xl text-white font-black"
+            words={winners.at(-1) ?? "What the fuck"}
+            delay={0.25}
+          />
+          {/* <h1 className="text-9xl font-black">{winners.at(-1)}</h1> */}
         </DialogContent>
       </Dialog>
     </main>

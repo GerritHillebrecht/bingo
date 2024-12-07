@@ -30,7 +30,7 @@ export function WinnersTable({
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Platzierung</TableHead>
+          <TableHead className="w-[100px]">Sieger</TableHead>
           <TableHead>Name</TableHead>
           <TableHead className="text-right">Löschen</TableHead>
         </TableRow>

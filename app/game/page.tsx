@@ -190,40 +190,42 @@ export default function GamePage() {
                   ))}
             </div>
           </div>
-          <div className="flex flex-col items-center justify-center pb-4">
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button className="w-full">Bingo hinzufügen</Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Sieger festlegen</DialogTitle>
-                  <DialogDescription>
-                    Legen den {(winners?.length || 0) + 1}. Sieger fest.
-                  </DialogDescription>
-                </DialogHeader>
+          <div className="border rounded bg-white p-2">
+            <div className="flex flex-col items-center justify-center pb-4">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="w-full">Bingo hinzufügen</Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Sieger festlegen</DialogTitle>
+                    <DialogDescription>
+                      Legen den {(winners?.length || 0) + 1}. Sieger fest.
+                    </DialogDescription>
+                  </DialogHeader>
 
-                <Input
-                  id="name"
-                  onChange={handleWinnerNameChange}
-                  value={winnerNameInputValue}
-                  className="col-span-7"
-                  placeholder="Name des Siegers"
-                />
+                  <Input
+                    id="name"
+                    onChange={handleWinnerNameChange}
+                    value={winnerNameInputValue}
+                    className="col-span-7"
+                    placeholder="Name des Siegers"
+                  />
 
-                <DialogFooter className="!justify-start">
-                  <DialogClose asChild>
-                    <Button
-                      onClick={handleAddWinner}
-                      type="submit"
-                      className="text-left"
-                    >
-                      {(winners?.length || 0) + 1}. Sieger festlegen
-                    </Button>
-                  </DialogClose>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+                  <DialogFooter className="!justify-start">
+                    <DialogClose asChild>
+                      <Button
+                        onClick={handleAddWinner}
+                        type="submit"
+                        className="text-left"
+                      >
+                        {(winners?.length || 0) + 1}. Sieger festlegen
+                      </Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
             {winners.length > 0 && <WinnersTable winners={winners} />}
           </div>
         </aside>

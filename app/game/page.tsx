@@ -184,7 +184,9 @@ export default function GamePage() {
               value={(pulledNumbers.length / bingoNumbers) * 100}
               max={bingoNumbers}
             />
-            <RainbowButton onClick={pullNumber} className="w-full h-16 text-xl">Nummer ziehen</RainbowButton>
+            <RainbowButton onClick={pullNumber} className="w-full h-16 text-xl">
+              {pulledNumbers.length === 0 ? "Erste Zahl ziehen" : "Nächste Zahl"}
+            </RainbowButton>
             {/* <Button onClick={pullNumber} className="w-full h-16 text-xl">
               Nummer ziehen
             </Button> */}
